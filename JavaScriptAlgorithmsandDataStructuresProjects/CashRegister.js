@@ -11,6 +11,7 @@ const currencyUnit = {
 	"ONE HUNDRED": 10000
   }
   
+  
   function checkCashRegister(price, cash, cid) {
   
 	let changeSum = cash * 100 - price * 100;
@@ -24,7 +25,7 @@ const currencyUnit = {
 	filteredCid.forEach(elem => {
 	  let curr = elem[0];
 	  let currSum = elem[1] * 100;
-	  cidSum += currSum
+	  cidSum += currSum;
 	  let amount = 0;
 	  while (changeSum >= currencyUnit[curr] && currSum > 0) {
 		amount += currencyUnit[curr];
@@ -34,8 +35,18 @@ const currencyUnit = {
 	  if (amount !== 0) {
 		change.push([curr, amount / 100]);
 	  }
-	})
-	return change;
+	});
+  
+	if (changeSum > 0) {
+	  status = 'INSUFFICIENT_FUNDS';
+	  change = [];
+	} else if (changeSum == 0 && changeSumCheck == cidSum) {
+	  status = 'CLOSED';
+	  change = cid;
+	} else {
+	  status = 'OPEN';
+	}
+	return { 'status': status, 'change': change };
   }
   
-  console.log(checkCashRegister(19.5, 20, [["PENNY", 1.01], ["NICKEL", 2.05], ["DIME", 3.1], ["QUARTER", 4.25], ["ONE", 90], ["FIVE", 55], ["TEN", 20], ["TWENTY", 60], ["ONE HUNDRED", 100]]));
+  console.log(checkCashRegister(19.5, 20, [["PENNY", 0.5], ["NICKEL", 0], ["DIME", 0], ["QUARTER", 0], ["ONE", 0], ["FIVE", 0], ["TEN", 0], ["TWENTY", 0], ["ONE HUNDRED", 0]]));
